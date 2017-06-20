@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+     <link rel="stylesheet" href="css/friaul.css"/>
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+     <title> Wanderwege Friaul </title>
+
+     <script src="data/dordolla.js"></script>
+
+     <script src="js/leaflet/leaflet.js"></script>
+     <script src="js/leaflet-hash/leaflet-hash.js"></script>
+     <script src="data/grauzaria.js"></script>
+     <script src="js/leaflet-mouseposition/L.Control.MousePosition.js"></script>
+     <link rel="stylesheet" href="css/L.Control.MousePosition.css"/>
+
+     <script src= "data/udine.jpg"></script>
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="background-image: url('data/udine.jpg')" id="topcontent">
+
+        <div id="pic_credits">
+
+          Photo: Udine by <a href="https://www.flickr.com/photos/stefanjurca/14620785226/">Ștefan Jurcă</a>. <a style="none" href="https://creativecommons.org/licenses/by/2.0/">CC-BY-2.0</a>
+
+        </div>
+
+        <h1 id="header">Wandern</h1>
+
+    </div>
+  <div id="linkbar">
+
+         <ul>
+             <li><a  href="https://andik1955.github.io/projekt/index.html">Übersicht Friaul</a></li>
+             <li><a  class="active" href="https://linuskn.github.io/projekt/index.html">Wanderwege</a></li>
+             <li><a href="https://lars272.github.io/Projekt/index.html">Radwege</a></li>
+         </ul>
+
+     </div>
+
+  <div id="mapwrapper">
+
+          <div id="map"></div>
+          <div id="mapinfo">
+Die Folgenden Wanderwege stammen von Open Street Map und veranschaulichen das Potential für Wanderwege in der Gegend von Dordolla. Die Daten wurden mit Hilfe von Saga Gis in Geojson Files umgewandelt. Es ist zu erkennen das für diese Region viele Wanderwege möglich sind, die teilweise nicht vollständig Kartiert wurden. Diese Karte soll einen Überblick über die Möglichkeiten liefern und zu einer Begehung der Wege anregen, damit diese Besser verifiziert werden. Da bis jetzt kaum Schwierigkeitsangaben zu finden sind. Nur die Unterteilung in Path und Track ist bisher vorgenommen worden.
+</div>
+
+  </div>
+
+
+
+<script>
+
+var layers = {
+
+
+
+    osm: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    subdomains: ['a', 'b', 'c'],
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+})
+};
+var map = L.map('map', {
+    layers: [layers.osm],
+    center: [46.476825, 13.15999],
+    zoom: 13
+});
+var layerControl = L.control.layers({
+
+            "OpenStreetMap": layers.osm,
+        }).addTo(map);
+
+L.control.scale({
+           maxWidth: 200,
+           metric: true,
+           imperial: false
+       }).addTo(map);
+
+var hash = new L.Hash(map);
+
+//L.geoJSON(window.dordolla).addTo(map);
+L.geoJSON(window.grauzaria).addTo(map);
+
+var linienWanderwege = L.geoJSON(window.dordolla, {
+           style: function(feature) {
+               var farbe = "";
+               if (feature.properties.type == "track") {
+                   farbe = "red";
+               } else {
+                   farbe = "orange";
+               }
+               return {
+                   color: farbe
+               };
+           }
+
+       }).addTo(map);
+
+
+       var cabin = L.marker([46.476825, 13.159995], {title: "Rifugio Grauzaria", icon : L.icon({iconUrl: 'icons/cabin.png'}) }).addTo(map);
+
+cabin.bindPopup('<p><a href= "https://www.dolomiten-friaul.de/rifugio/rifugio-grauzaria/" > Weitere Informationen </a></p>')
+
+</script>"
+</body>
+
+</html>
